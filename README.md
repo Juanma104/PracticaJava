@@ -1,2 +1,4 @@
 # PracticaJava
-Ejercicio Acceso a Datos
+Ejercico Práctico Acceso a Datos 1T Acceso a Datos
+
+Realizado por Juanma y Rubén.
