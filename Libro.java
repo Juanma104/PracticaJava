@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Libro implements Serializable {	
+	
+	// IMPLEMENTACIÓN DE ATRIBUTOS DE CLASE
 	private int id;
 	private String titulo;
 	private String autor;
 	private int anioPublicacion;
 	private String genero;
 	
+	// CONSTRUCTORES Libro CON SOBRECARGA APLICADA
 	public Libro() {
 		
 	}
@@ -23,24 +26,10 @@ public class Libro implements Serializable {
 		this.autor = autor;
 		this.anioPublicacion = anioPublicacion;
 		this.genero = genero;
-	}
-
-	public static int obtenerUltimoId(List<Libro> libros) {
-		if (libros == null || libros.isEmpty()) {
-			System.out.println("Error: No hay ningun libro");
-			return 0;
-		} else {
-			int ultimoId = Integer.MIN_VALUE;
-			for (Libro libro : libros) {
-				if (libro.getId() > ultimoId) {
-                    ultimoId = libro.getId();
-                }
-			}
-			return ultimoId;
-		}
-	}
+	}	
 	
 	
+	// METODOS DE CLASE // GETTERS & SETTERS
 	public int getId() {
 		return id;
 	}
@@ -86,6 +75,5 @@ public class Libro implements Serializable {
 		return "Libro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", anioPublicacion=" + anioPublicacion
 				+ ", genero=" + genero + "]";
 	}
-	
 	
 }
