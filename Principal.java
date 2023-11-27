@@ -54,35 +54,38 @@ public class Principal {
     private static void gestionarLibros() {
         int opcion;
 
-        System.out.println("\nGestion de Libros");
-        System.out.println("1. Escribir / Crear libro");
-        System.out.println("2. Leer libro");
-        System.out.println("3. Actualizar libro");
-        System.out.println("4. Eliminar libro");
-        System.out.println("5. Volver");
-        System.out.print("Seleccione una opción: ");
+        // Implementación de bucle do-while para que cuando introduzca la opcion 5 vuelva atras.
+        do {
+            System.out.println("\nGestion de Libros");
+            System.out.println("1. Escribir / Crear libro");
+            System.out.println("2. Leer libro");
+            System.out.println("3. Actualizar libro");
+            System.out.println("4. Eliminar libro");
+            System.out.println("5. Volver");
+            System.out.print("Seleccione una opción: ");
 
-        opcion = scanner.nextInt();
+            opcion = scanner.nextInt();
 
-        switch (opcion) {
-            case 1:
-                escribirLibro();
-                break;
-            case 2:
-                leerLibros();
-                break;
-            case 3:
-                // TODO: Implementar lógica para actualizar libros
-                break;
-            case 4:
-                eliminarLibro();
-                break;
-            case 5:
-            	// TODO: Implementar lógica para volver atrás en el menú
-                break;
-            default:
-                throw new IllegalArgumentException("Valor " + opcion + " no esperado.");
-        }
+            switch (opcion) {
+                case 1:
+                    escribirLibro();
+                    break;
+                case 2:
+                    leerLibros();
+                    break;
+                case 3:
+                	actualizarLibro();
+                    break;
+                case 4:
+                    eliminarLibro();
+                    break;
+                case 5:
+                    System.out.println("Volviendo atras...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        } while (opcion != 5);
     }
 
     
@@ -153,10 +156,76 @@ public class Principal {
 
     
     
-    
-    private static void gestionarAutores() {
-        // TODO: Implementar lógica para gestionar autores
+    // METODO ACTUALIZAR / MODIFICAR LIBRO
+    private static void actualizarLibro() {
+        // Preguntamos al usuario el ID del libro a actualizar
+        System.out.println("Introduzca el ID del libro que desea actualizar: ");
+        int idLibroActualizar = scanner.nextInt();
+        scanner.nextLine();
+
+        // Preguntamos al usuario la nueva información
+        System.out.println("Introduzca el nuevo título del libro: ");
+        String nuevoTitulo = scanner.nextLine();
+        System.out.println("Introduzca el nuevo autor del libro: ");
+        String nuevoAutor = scanner.nextLine();
+        System.out.println("Introduzca el nuevo año de publicación del libro: ");
+        int nuevoAnioPublicacion = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Introduzca el nuevo género del libro: ");
+        String nuevoGenero = scanner.nextLine();
+
+        // Creamos un nuevo objeto Libro con la nueva información actualizada
+        Libro nuevoLibro = new Libro(idLibroActualizar, nuevoTitulo, nuevoAutor, nuevoAnioPublicacion, nuevoGenero);
+
+        // Llamamos al método actualizarLibroBinario para actualizar el libro en el archivo
+        gestorFicheros.actualizarLibroBinario(filename, idLibroActualizar, nuevoLibro);
     }
+
+    
+    
+    
+    
+    
+    
+    //-----TODO: IMPLEMENTAR FUNCIONAMIENTO AUTORES-----//
+    private static void gestionarAutores() {
+        int opcion;
+
+        // Implementación de bucle do-while para que cuando introduzca la opcion 5 vuelva atras.
+        do {
+            System.out.println("\nGestión de Autores");
+            System.out.println("1. Escribir / Crear autor");
+            System.out.println("2. Leer autor");
+            System.out.println("3. Actualizar autor");
+            System.out.println("4. Eliminar autor");
+            System.out.println("5. Volver");
+            System.out.print("Seleccione una opción: ");
+
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    //TODO: Implementación del metodo escribirAutor();
+                    break;
+                case 2:
+                	//TODO: Implementación del metodo leerLibros();
+                    break;
+                case 3:
+                	//TODO: Implementación del metodo actualizarLibro();
+                    break;
+                case 4:
+                	//TODO: Implementación del metodo eliminarLibro();
+                    break;
+                case 5:
+                    System.out.println("Volviendo atras...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        } while (opcion != 5);
+    }
+    
+    
 
     private static void gestionarPrestamos() {
         // TODO: Implementar lógica para gestionar préstamos
