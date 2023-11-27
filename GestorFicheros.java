@@ -7,6 +7,7 @@ import java.util.List;
 
 public class GestorFicheros {
 
+	
     // Método guardar libros / escribir libros
     public void guardarLibrosBinario(List<Libro> libros, String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
@@ -18,6 +19,7 @@ public class GestorFicheros {
         }
     }
 
+    
     // Método leer libros
     public List<Libro> leerLibrosBinario(String filename) {
     	// Creamos una lista que contendra los libros que vamos a leer
@@ -31,6 +33,7 @@ public class GestorFicheros {
         return libros;
     }
 
+    
     // Método eliminar libros
     public void eliminarLibrosBinario(String filename, int idLibroBorrar) {
         try {
@@ -51,6 +54,34 @@ public class GestorFicheros {
             }
 
             // Guardamos la lista actualizada en el fichero
+            guardarLibrosBinario(librosLeidos, filename);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    // Método actualizar / modificar libros
+    public void actualizarLibroBinario(String filename, int idLibroActualizar, Libro nuevoLibro) {
+        try {
+            // Leemos la lista de libros existentes
+            List<Libro> librosLeidos = leerLibrosBinario(filename);
+
+            // Buscamos en la lista el libro que desea el usuario
+            for (int i = 0; i < librosLeidos.size(); i++) {
+            	// Obtenemos el objeto libro
+                Libro libro = librosLeidos.get(i);
+                // Comparamos que la id del objeto sea la que queremos actualizar
+                if (libro.getId() == idLibroActualizar) {
+                    // Actualizamos la información del libro con la nueva información
+                    librosLeidos.set(i, nuevoLibro);
+                    System.out.println("Libro con ID " + idLibroActualizar + " actualizado correctamente.");
+                    break; // Salimos del bucle for
+                }
+            }
+
+            // Guardamos la lista actualizada
             guardarLibrosBinario(librosLeidos, filename);
 
         } catch (Exception e) {
