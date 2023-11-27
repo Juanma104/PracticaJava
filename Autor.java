@@ -1,106 +1,61 @@
 package biblioteca;
 
-
-
 import java.io.Serializable;
 
 public class Autor implements Serializable {
 	private int id;
 	private String nombre;
 	private String nacionalidad;
-	private int anionacimiento;
-	private String genero;
+	private int anioNacimiento;
 	
-	
-	
-	
-	public Autor(int id, String nombre, String nacionalidad, int anionacimiento, String genero) {
+	public Autor(int id, String nombre, String nacionalidad, int anioNacimiento) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.nacionalidad = nacionalidad;
-		this.anionacimiento = anionacimiento;
-		this.genero = genero;
+		this.anioNacimiento = anioNacimiento;
 	}
 
-
-
-
+	
+	// METODOS DE CLASE // GETTERS & SETTERS
 	public int getId() {
 		return id;
 	}
-
-
-
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
-
-
 	public String getNombre() {
 		return nombre;
 	}
-
-
-
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-
-
-
 	public String getNacionalidad() {
 		return nacionalidad;
 	}
-
-
-
 
 	public void setNacionalidad(String nacionalidad) {
 		this.nacionalidad = nacionalidad;
 	}
 
+	public int getAnioNacimiento() {
+		return anioNacimiento;
+	}
 
-
-
-	public int getAnionacimiento() {
-		return anionacimiento;
+	public void setAnioNacimiento(int anioNacimiento) {
+		this.anioNacimiento = anioNacimiento;
 	}
 
 
-
-
-	public void setAnionacimiento(int anionacimiento) {
-		this.anionacimiento = anionacimiento;
-	}
-
-
-
-
-	public String getGenero() {
-		return genero;
-	}
-
-
-
-
-	public void setGenero(String genero) {
-		this.genero = genero;
+	@Override
+	public String toString() {
+		return "Autor [id=" + id + ", nombre=" + nombre + ", nacionalidad=" + nacionalidad + ", anioNacimiento="
+				+ anioNacimiento + "]";
 	}
 	
 	
-	
-	
-	
-	// Constructor, getters y setters
 }
-
-//HOLA
-
-
-// HASTA LUEGO
