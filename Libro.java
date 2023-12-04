@@ -13,6 +13,7 @@ public class Libro implements Serializable {
 	private String autor;
 	private int anioPublicacion;
 	private String genero;
+	private boolean prestado;
 	
 	// CONSTRUCTORES Libro CON SOBRECARGA APLICADA
 	public Libro() {
@@ -26,6 +27,7 @@ public class Libro implements Serializable {
 		this.autor = autor;
 		this.anioPublicacion = anioPublicacion;
 		this.genero = genero;
+		this.prestado = false;
 	}	
 	
 	
@@ -69,11 +71,21 @@ public class Libro implements Serializable {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
+	
+	public boolean isPrestado() {
+        return prestado;
+    }
+
+    public void setPrestado(boolean prestado) {
+        this.prestado = prestado;
+    }
 
 	@Override
 	public String toString() {
 		return "Libro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", anioPublicacion=" + anioPublicacion
-				+ ", genero=" + genero + "]";
+				+ ", genero=" + genero + ", prestado=" + prestado + "]";
 	}
+
+    
 	
 }
