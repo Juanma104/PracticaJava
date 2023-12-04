@@ -1,86 +1,65 @@
 package biblioteca;
 
-
-
 import java.io.Serializable;
 
 public class Prestamo implements Serializable {
-	private int idlibro;
-	private String nusuario;
-	private String fechaprestamo;
-	private int aniopublicacion;
+	private int idLibro;
+	private String nombreUsuario;
+	private String fechaPrestamo;
+	private String fechaDevolucion;
 	
-	
-	
-	
-	public Prestamo(int idlibro, String nusuario, String fechaprestamo, int aniopublicacion) {
+	public Prestamo(int idLibro, String nombreUsuario, String fechaPrestamo, String fechaDevolucion) {
 		super();
-		this.idlibro = idlibro;
-		this.nusuario = nusuario;
-		this.fechaprestamo = fechaprestamo;
-		this.aniopublicacion = aniopublicacion;
+		this.idLibro = idLibro;
+		this.nombreUsuario = nombreUsuario;
+		this.fechaPrestamo = fechaPrestamo;
+		this.fechaDevolucion = fechaDevolucion;
 	}
 
 
-
-
-	public int getIdlibro() {
-		return idlibro;
+	public int getIdLibro() {
+		return idLibro;
 	}
 
 
-
-
-	public void setIdlibro(int idlibro) {
-		this.idlibro = idlibro;
+	public void setIdLibro(int idLibro) {
+		this.idLibro = idLibro;
 	}
 
 
-
-
-	public String getNusuario() {
-		return nusuario;
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
 
 
-
-
-	public void setNusuario(String nusuario) {
-		this.nusuario = nusuario;
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
 	}
 
 
-
-
-	public String getFechaprestamo() {
-		return fechaprestamo;
+	public String getFechaPrestamo() {
+		return fechaPrestamo;
 	}
 
 
-
-
-	public void setFechaprestamo(String fechaprestamo) {
-		this.fechaprestamo = fechaprestamo;
+	public void setFechaPrestamo(String fechaPrestamo) {
+		this.fechaPrestamo = fechaPrestamo;
 	}
 
 
-
-
-	public int getAniopublicacion() {
-		return aniopublicacion;
+	public String getFechaDevolucion() {
+		return fechaDevolucion;
 	}
 
 
+	public void setFechaDevolucion(String fechaDevolucion) {
+		this.fechaDevolucion = fechaDevolucion;
+	}
 
 
-	public void setAniopublicacion(int aniopublicacion) {
-		this.aniopublicacion = aniopublicacion;
+	@Override
+	public String toString() {
+		return idLibro + ", " + nombreUsuario + ", Préstamo: " + fechaPrestamo + ", Devolución: " + fechaDevolucion;
 	}
 	
-	
-	
-	
-	
-	
-	// Constructor, getters y setters
 }
