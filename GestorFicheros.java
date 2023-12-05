@@ -28,15 +28,21 @@ public class GestorFicheros {
 
 	// Método leer libros
 	public List<Libro> leerLibrosBinario(String filename) {
-		// Creamos una lista que contendra los libros que vamos a leer
-		List<Libro> libros = new ArrayList<>();
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-			// Leemos el objeto libro de la lista de libros haciendo uso de ObjectInputStream
-			libros = (List<Libro>) ois.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return libros;
+		// Creamos una lista de libros provisional que devolveremos mas tarde con todos los libros leidos
+	    List<Libro> libros = new ArrayList<>();
+	    try {
+	        File file = new File(filename);
+	        // MANEJO DE ERRORES: Comprobamos que el fichero tenga contenido, si no tiene no leerá nada
+	        if (file.length() > 0) {
+	            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+	            	// Leemos los objetos de la lista con ObjectInputStream
+	                libros = (List<Libro>) ois.readObject();
+	            }
+	        }
+	    } catch (IOException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    return libros;
 	}
 
 	// Método eliminar libros
@@ -109,15 +115,21 @@ public class GestorFicheros {
 
 	// Método leer autores
 	public List<Autor> leerAutoresBinario(String filename) {
-		// Creamos una lista que contendra los autores que vamos a leer
-		List<Autor> autores = new ArrayList<>();
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-			// Leemos el objeto autor de la lista de autores haciendo uso de ObjectInputStream
-			autores = (List<Autor>) ois.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return autores;
+		// Creamos una lista de autores provisional que devolveremos mas tarde con todos los autores leidos
+	    List<Autor> autores = new ArrayList<>();
+	    try {
+	        File file = new File(filename);
+	        // MANEJO DE ERRORES: Comprobamos que el fichero tenga contenido, si no tiene no leerá nada
+	        if (file.length() > 0) {
+	            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+	            	// Leemos los objetos de la lista con ObjectInputStream
+	                autores = (List<Autor>) ois.readObject();
+	            }
+	        }
+	    } catch (IOException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    return autores;
 	}
 
 	// Método eliminar autores
@@ -258,5 +270,61 @@ public class GestorFicheros {
         }
     }
     
+    
+    //-----APARTADO GESTIONAR EXPORTAR IMPORTAR XML-----//
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //-----APARTADO DE COPIAS DE SEGURIDAD-----//
+    
+    // MÉTODO EXPORTAR ARCHIVO BINARIO
+    public void exportarArchivoBinario(byte[] datos, String nombreArchivo, String carpetaDestino) {
+        // Creamos la carpeta si no existe
+        File carpeta = new File(carpetaDestino);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
+
+        // Creamos la ruta completa del archivo
+        String rutaArchivo = carpetaDestino + File.separator + nombreArchivo;
+        
+        try (FileOutputStream fos = new FileOutputStream(rutaArchivo)) {
+            // Escribimos los datos en el archivo binario
+            fos.write(datos);
+            System.out.println("Archivo exportado exitosamente en " + rutaArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+      
+    
+    // MÉTODO EXPORTAR ARCHIVO TEXTO
+    public void exportarArchivoTexto(String datos, String nombreArchivo, String carpetaDestino) {
+        // Creamos la carpeta si no existe
+        File carpeta = new File(carpetaDestino);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
+
+        // Creamos la ruta completa del archivo
+        String rutaArchivo = carpetaDestino + File.separator + nombreArchivo;
+
+        try (FileWriter writer = new FileWriter(rutaArchivo)) {
+            // Escribimos los datos en el archivo de texto
+            writer.write(datos);
+            System.out.println("Archivo exportado exitosamente en " + rutaArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
