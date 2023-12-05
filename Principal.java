@@ -1,26 +1,54 @@
 package biblioteca;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 public class Principal {
     private static Scanner scanner = new Scanner(System.in);
     private static GestorFicheros gestorFicheros = new GestorFicheros();
-    public static String filenameLibros = "C:\\Users\\Ruben\\Documents\\librosBinario.bin";
-    public static String filenameAutores = "C:\\Users\\Ruben\\Documents\\autoresBinario.bin";
-    public static String filenamePrestamos = "C:\\Users\\Ruben\\Documents\\prestamos.txt";
+    
+    // RUTAS DE LOS ARCHIVOS A CAMBIAR POR EL USUARIO PARA COMENZAR A EJECUTAR LA APLICACIÓN.
+    public static String filenameLibros = "archivos\\librosBinario.bin";
+    public static String filenameAutores = "archivos\\autoresBinario.bin";
+    public static String filenamePrestamos = "archivos\\prestamos.txt";
+    
     // Declaramos la lista de tipo Libro "libros"
     private static List<Libro> libros;
     // Declaramos la lista de tipo Autor "autores"
     private static List<Autor> autores;
-
+    
     public static void main(String[] args) {
     	// Asignamos a "libros" el contenido que haya en el fichero "filenameLibros" para recuperar los posibles datos que contenga
         libros = gestorFicheros.leerLibrosBinario(filenameLibros);
         // Asignamos a "autores" el contenido que haya en el fichero "filenameAutores" para recuperar los posibles datos que contenga
         autores = gestorFicheros.leerAutoresBinario(filenameAutores);
-
+		
         boolean salir = false;
         while (!salir) {
             mostrarMenu();
@@ -39,6 +67,9 @@ public class Principal {
                     gestionarExportImportXML();
                     break;
                 case 5:
+                    realizarCopiaDeSeguridad();
+                    break;
+                case 6:
                     salir = true;
                     break;
                 default:
@@ -53,7 +84,8 @@ public class Principal {
         System.out.println("2. Gestionar Autores");
         System.out.println("3. Gestionar Préstamos");
         System.out.println("4. Exportar/Importar Datos (XML)");
-        System.out.println("5. Salir");
+        System.out.println("5. Realizar Copia de Seguridad");
+        System.out.println("6. Salir");
         System.out.print("Seleccione una opción: ");
     }
 
@@ -395,21 +427,21 @@ public class Principal {
 
     // METODO REGISTRAR DEVOLUCIÓN
     private static void registrarDevolucion() {
-        // Preguntar al usuario por el ID del libro y la fecha de devolución
+        // Preguntamos al usuario por el ID del libro y la fecha de devolución
         System.out.println("Introduzca el ID del libro: ");
         int idLibroDevolucion = scanner.nextInt();
         
-        // Verificar si el libro existe antes de intentar registrar la devolución
+        // Verificamos si el libro existe antes de intentar registrar la devolución
         if (!libroExiste(idLibroDevolucion)) {
             System.out.println("El libro con ID " + idLibroDevolucion + " no existe. No se puede registrar la devolución.");
             return;
         }
         
-        scanner.nextLine(); // Limpiar el buffer
+        scanner.nextLine(); // Limpiamos el buffer
         System.out.println("Introduzca la fecha de devolución (dd/mm/yyyy): ");
         String fechaDevolucion = scanner.nextLine();
 
-        // Llamar al método para registrar la devolución en el archivo de texto
+        // Llamamos al método para registrar la devolución en el archivo de texto
         gestorFicheros.registrarDevolucion(idLibroDevolucion, fechaDevolucion, filenamePrestamos, libros);
         System.out.println("Devolución registrada correctamente.");
     }
@@ -417,20 +449,392 @@ public class Principal {
     
     // METODO VER PRESTAMOS / LEER PRESTAMOS
     private static void verPrestamos() {
-        // Llamar al método para mostrar los préstamos almacenados en el archivo de texto
+        // Llamamos al método para mostrar los préstamos almacenados en el archivo de texto
         gestorFicheros.mostrarPrestamos(filenamePrestamos);
     }
     
     
+    //TODO: TERMINAR DE COMENTAR LOS METODOS NUEVOS
     
-    
-    
-    // TODO: HACER APARTADO DE IMPORTAR EXPORTAR XML Y BACKUP
-    
-    
-    
-    //-----APARTADO GESTIONAR EXPORTAR IMPORTAR XML-----//
+    //-----APARTADO GESTIONAR IMPORTAR / EXPORTAR XML-----//
     private static void gestionarExportImportXML() {
-        // TODO: Implementar lógica para exportar/importar datos con XML
+    	int opcion;
+
+    	// Implementación de bucle do-while para que cuando introduzca la opcion 3 vuelva atras.
+        do {
+            System.out.println("\nGestión de Exportar Importar XML");
+            System.out.println("1. Importar XML");
+            System.out.println("2. Exportar XML");
+            System.out.println("3. Volver");
+            System.out.print("Seleccione una opción: ");
+
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                	// Menú de categorias para la opción importar
+                	System.out.println("Introduzca que categoría desea importar");
+                	System.out.println("1.- Importar XML de Libros");
+                	System.out.println("2.- Importar XML de Autores");
+                	int categoria = scanner.nextInt();
+                	scanner.nextLine();
+                	
+                	switch (categoria) {
+					case 1: {
+						// Llamada al metodo Importar Libro XML
+						System.out.println("Introduzca el nombre del archivo a importar (incluyendo la extension .xml)");
+	                	String nombreArchivo = scanner.nextLine();
+	                	importarLibroXML(nombreArchivo);
+						break;
+					}
+					case 2: {
+						// Llamada al metodo Importar Autor XML
+						System.out.println("Introduzca el nombre del archivo a importar (incluyendo la extension .xml)");
+	                	String nombreArchivo = scanner.nextLine();
+	                	importarAutorXML(nombreArchivo);
+						break;
+					}
+					default:
+						System.out.println("Opción no válida. Por favor, intente de nuevo.");
+					}
+                	
+                    break;
+                case 2:
+                	// Menú de categorias para la opción importar
+                	System.out.println("Introduzca que categoría desea exportar");
+                	System.out.println("1.- Exportar XML de Libros");
+                	System.out.println("2.- Exportar XML de Autores");
+                	int categoria2 = scanner.nextInt();
+                	scanner.nextLine();
+                	
+                	switch (categoria2) {
+					case 1: {
+						// Llamada al metodo Exportar Libro XML
+						System.out.println("Introduzca el nombre del archivo a exportar (incluyendo la extension .xml)");
+	                	String nombreArchivo = scanner.nextLine();
+	                	exportarLibrosXML(nombreArchivo);
+						break;
+					}
+					case 2: {
+						// Llamada al metodo Exportar Autor XML
+						System.out.println("Introduzca el nombre del archivo a exportar (incluyendo la extension .xml)");
+	                	String nombreArchivo = scanner.nextLine();
+	                	exportarAutoresXML(nombreArchivo);
+						break;
+					}
+					default:
+						System.out.println("Opción no válida. Por favor, intente de nuevo.");
+					}
+                	
+                    break;
+                case 3:
+                	System.out.println("Volviendo atrás...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        } while (opcion != 3);
     }
+    
+    
+    // Método para importar un archivo libro XML
+    private static void importarLibroXML(String nombreArchivo) {
+        try {
+        	int nuevoId;
+        	
+            // Creamos una nueva instancia de DocumentBuilderFactory y DocumentBuilder
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Cargamos el archivo XML
+            File archivoXML = new File(nombreArchivo);
+            Document documento = dBuilder.parse(archivoXML);
+
+            // Normalizamos el documento
+            documento.getDocumentElement().normalize();
+
+            // Obtenemos la lista de nodos con un nombre específico en este caso "libro"
+            NodeList listaLibros = documento.getElementsByTagName("libro");
+
+            // Iteramos sobre la lista de nodos "listaLibros"
+            for (int i = 0; i < listaLibros.getLength(); i++) {
+                Node nodoLibro = listaLibros.item(i);
+
+                if (nodoLibro.getNodeType() == Node.ELEMENT_NODE) {
+                    Element elementoLibro = (Element) nodoLibro;
+
+                    // Obtenemos los datos del elemento libro
+                    String titulo = obtenerContenidoElemento(elementoLibro, "titulo");
+                    String autor = obtenerContenidoElemento(elementoLibro, "autor");
+                    int anioPublicacion = Integer.parseInt(obtenerContenidoElemento(elementoLibro, "anioPublicacion"));
+                    String genero = obtenerContenidoElemento(elementoLibro, "genero");
+
+                    // Controlamos la asignación de id del libro que vamos a añadir
+                    if (libros.isEmpty()) {
+                    	nuevoId = 1;
+                    } else {
+                    	nuevoId = libros.get(libros.size() - 1).getId() + 1;
+                    }
+                    
+                    // Añadimos el objeto libro
+                    libros.add(new Libro(nuevoId, titulo, autor, anioPublicacion, genero));
+
+                    // Imprimimos el resultado
+                    System.out.println("Libro importado:");
+                    System.out.println("Título: " + titulo);
+                    System.out.println("Autor: " + autor);
+                    System.out.println("Año de Publicación: " + anioPublicacion);
+                    System.out.println("Género: " + genero);
+                    System.out.println("------------------------");
+                }
+            }
+            
+            // Guardamos los cambios en nuestro fichero de libros
+            gestorFicheros.guardarLibrosBinario(libros, filenameLibros);
+
+            System.out.println("Archivo XML importado correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    // Método para importar un archivo autor XML
+    private static void importarAutorXML(String nombreArchivo) {
+        try {
+        	int nuevoId;
+        	
+            // Creamos una nueva instancia de DocumentBuilderFactory y DocumentBuilder
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Cargamos el archivo XML
+            File archivoXML = new File(nombreArchivo);
+            Document documento = dBuilder.parse(archivoXML);
+
+            // Normalizamos el documento
+            documento.getDocumentElement().normalize();
+
+            // Obtenemos la lista de nodos con un nombre específico en este caso "autor"
+            NodeList listaAutores = documento.getElementsByTagName("autor");
+
+            // Iteramos sobre la lista de nodos
+            for (int i = 0; i < listaAutores.getLength(); i++) {
+                Node nodoAutor = listaAutores.item(i);
+
+                if (nodoAutor.getNodeType() == Node.ELEMENT_NODE) {
+                    Element elementoAutor = (Element) nodoAutor;
+
+                    // Obtenemos los datos del elemento autor
+                    String nombre = obtenerContenidoElemento(elementoAutor, "nombre");
+                    String nacionalidad = obtenerContenidoElemento(elementoAutor, "nacionalidad");
+                    int anioNacimiento = Integer.parseInt(obtenerContenidoElemento(elementoAutor, "anioNacimiento"));
+
+                    // Controlamos la asignación de id del autor que vamos a añadir
+                    if (autores.isEmpty()) {
+                    	nuevoId = 1;
+                    } else {
+                    	nuevoId = autores.get(autores.size() - 1).getId() + 1;
+                    }
+                    
+                 	// Añadimos el objeto autor
+                    autores.add(new Autor(nuevoId, nombre, nacionalidad, anioNacimiento));
+
+                    // Imprimimos el resultado
+                    System.out.println("Autor importado:");
+                    System.out.println("Nombre: " + nombre);
+                    System.out.println("Nacionalidad: " + nacionalidad);
+                    System.out.println("Año de Nacimiento: " + anioNacimiento);
+                    System.out.println("------------------------");
+                }
+            }
+            
+            // Guardamos los cambios en nuestro fichero de autores
+            gestorFicheros.guardarAutoresBinario(autores, filenameAutores);
+
+            System.out.println("Archivo XML importado correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    // Método auxiliar para obtener el contenido de un elemento
+    private static String obtenerContenidoElemento(Element elementoPadre, String nombreElemento) {
+        NodeList listaNodos = elementoPadre.getElementsByTagName(nombreElemento);
+        Element elemento = (Element) listaNodos.item(0);
+        return elemento.getTextContent();
+    }
+    
+    
+    
+    // Método para exportar libros a un archivo XML
+    private static void exportarLibrosXML(String nombreArchivo) {
+        try {
+            // Creamos una nueva instancia de DocumentBuilderFactory y DocumentBuilder
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Creamos un nuevo documento XML
+            Document documento = dBuilder.newDocument();
+
+            // Creamos el elemento raíz del documento
+            Element raiz = documento.createElement("libros");
+            documento.appendChild(raiz);
+
+            // Creamos un elemento para cada libro y agregarlo al documento
+            for (Libro libro : libros) {
+                Element libroElemento = documento.createElement("libro");
+                raiz.appendChild(libroElemento);
+
+                // Añadimos atributos al elemento libro
+                libroElemento.setAttribute("id", String.valueOf(libro.getId()));
+
+                // Añadimos subelementos (titulo, autor, anioPublicacion, genero) al elemento libro
+                agregarElemento(documento, libroElemento, "titulo", libro.getTitulo());
+                agregarElemento(documento, libroElemento, "autor", libro.getAutor());
+                agregarElemento(documento, libroElemento, "anioPublicacion", String.valueOf(libro.getAnioPublicacion()));
+                agregarElemento(documento, libroElemento, "genero", libro.getGenero());
+            }
+
+            // Guardamos el documento XML en un archivo
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(documento);
+            StreamResult result = new StreamResult(new File(nombreArchivo));
+            transformer.transform(source, result);
+
+            System.out.println("Archivo XML de libros exportado correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    // Método para exportar autores a un archivo XML
+    private static void exportarAutoresXML(String nombreArchivo) {
+        try {
+            // Creamos una nueva instancia de DocumentBuilderFactory y DocumentBuilder
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Creamos un nuevo documento XML
+            Document documento = dBuilder.newDocument();
+
+            // Creamos el elemento raíz del documento
+            Element raiz = documento.createElement("autores");
+            documento.appendChild(raiz);
+
+            // Creamos un elemento para cada autor y agregarlo al documento
+            for (Autor autor : autores) {
+                Element autorElemento = documento.createElement("autor");
+                raiz.appendChild(autorElemento);
+
+                // Añadimos atributos al elemento autor
+                autorElemento.setAttribute("id", String.valueOf(autor.getId()));
+
+                // Añadimos subelementos (nombre, nacionalidad, anioNacimiento) al elemento autor
+                agregarElemento(documento, autorElemento, "nombre", autor.getNombre());
+                agregarElemento(documento, autorElemento, "nacionalidad", autor.getNacionalidad());
+                agregarElemento(documento, autorElemento, "anioNacimiento", String.valueOf(autor.getAnioNacimiento()));
+            }
+
+            // Guardamos el documento XML en un archivo
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(documento);
+            StreamResult result = new StreamResult(new File(nombreArchivo));
+            transformer.transform(source, result);
+
+            System.out.println("Archivo XML de autores exportado correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    // Método auxiliar para agregar elementos al documento XML
+    private static void agregarElemento(Document documento, Element padre, String nombre, String valor) {
+        Element elemento = documento.createElement(nombre);
+        elemento.appendChild(documento.createTextNode(valor));
+        padre.appendChild(elemento);
+    }
+    
+    
+
+    
+    //-----APARTADO REALIZAR COPIAS DE SEGURIDAD-----//
+    private static void realizarCopiaDeSeguridad() {
+
+        // Declaramos la carpeta destino donde se guardaran todos los ficheros "backup"
+        String carpetaDestino = System.getProperty("user.dir") + File.separator + "backup";
+
+        // Solicitamos al usuario que ingrese el nombre del archivo para el fichero de libros
+        System.out.print("Ingrese el nombre del archivo para guardar LIBROS (incluyendo la extension .bin): ");
+        scanner.nextLine();
+        String nombreDelArchivoLibros = scanner.nextLine();
+        
+        // Solicitamos al usuario que ingrese el nombre del archivo para el fichero de autores
+        System.out.print("Ingrese el nombre del archivo para guardar AUTORES (incluyendo la extension .bin): ");
+        String nombreDelArchivoAutores = scanner.nextLine();
+        
+        // Solicitamos al usuario que ingrese el nombre del archivo para el fichero de préstamos
+        System.out.print("Ingrese el nombre del archivo para guardar PRÉSTAMOS (incluyendo la extension .txt): ");
+        String nombreDelArchivoPrestamos = scanner.nextLine();
+        
+        // Guardamos los datos de libros y autores en distintos arrays de bytes, para prestamos en un String
+        byte[] datosAExportarLibros = leerDatosDesdeArchivoBinario(filenameLibros);
+        byte[] datosAExportarAutores = leerDatosDesdeArchivoBinario(filenameAutores);
+        String datosAExportarPrestamos = leerDatosDesdeArchivoNoBinario(filenamePrestamos);
+        
+        // Llamamos al método para exportar el archivo binario de LIBROS
+        gestorFicheros.exportarArchivoBinario(datosAExportarLibros, nombreDelArchivoLibros, carpetaDestino);
+        // Llamamos al método para exportar el archivo binario de AUTORES
+        gestorFicheros.exportarArchivoBinario(datosAExportarAutores, nombreDelArchivoAutores, carpetaDestino);
+        // Llamamos al método para exportar el archivo de PRÉSTAMOS
+        gestorFicheros.exportarArchivoTexto(datosAExportarPrestamos, nombreDelArchivoPrestamos, carpetaDestino);
+
+    }
+
+    
+    // Método para leer datos desde un archivo binario
+    private static byte[] leerDatosDesdeArchivoBinario(String rutaArchivo) {
+        try (FileInputStream fis = new FileInputStream(rutaArchivo)) {
+            // Crear un array de bytes para almacenar los datos leídos
+            byte[] datos = new byte[(int) new File(rutaArchivo).length()];
+
+            // Leemos los datos del archivo
+            fis.read(datos);
+
+            return datos;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null; // Manejo de errores
+        }
+    }
+    
+    
+    
+    // Método para leer datos desde un archivo no binario
+    private static String leerDatosDesdeArchivoNoBinario(String rutaArchivo) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append(System.lineSeparator());
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null; // Manejo de errores
+        }
+    }
+    
 }
