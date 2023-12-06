@@ -60,4 +60,4 @@ public class Autor implements Serializable {
 	
 }
 
-// ACTUALIZADO
+//ERRORES ACTUALIZADOS
