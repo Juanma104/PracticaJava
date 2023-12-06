@@ -1,0 +1,2 @@
+1, Ruben, Préstamo: 05/12/2023, Devolución: 08/12/2023
+3, Juanma, Préstamo: 06/12/2023, Devolución: 10/12/2023
