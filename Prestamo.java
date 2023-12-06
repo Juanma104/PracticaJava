@@ -63,3 +63,5 @@ public class Prestamo implements Serializable {
 	}
 	
 }
+
+// ERRORES ACTUALIZADOS
