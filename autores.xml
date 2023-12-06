@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<autores>
+    <autor id="1">
+        <nombre>Elvira Lindo</nombre>
+        <nacionalidad>Española</nacionalidad>
+        <anioNacimiento>1962</anioNacimiento>
+    </autor>
+    <autor id="2">
+        <nombre>Suzanne Collins</nombre>
+        <nacionalidad>Estadounidense</nacionalidad>
+        <anioNacimiento>1962</anioNacimiento>
+    </autor>
+    <autor id="3">
+        <nombre>J.K. Rowling</nombre>
+        <nacionalidad>Británica</nacionalidad>
+        <anioNacimiento>1965</anioNacimiento>
+    </autor>
+    <autor id="4">
+        <nombre>William Steig</nombre>
+        <nacionalidad>Estadounidense</nacionalidad>
+        <anioNacimiento>1907</anioNacimiento>
+    </autor>
+    <autor id="5">
+        <nombre>Isaac Asimov</nombre>
+        <nacionalidad>Rusa</nacionalidad>
+        <anioNacimiento>1990</anioNacimiento>
+    </autor>
+</autores>
