@@ -98,6 +98,18 @@ public class GestorFicheros {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	// Método para verificar la existencia de un libro por su ID
+    public boolean existeLibro(String filename, int idLibro) {
+        List<Libro> libros = leerLibrosBinario(filename);
+        for (Libro libro : libros) {
+            if (libro.getId() == idLibro) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	
 	//-----APARTADO DE AUTORES-----//
@@ -132,6 +144,7 @@ public class GestorFicheros {
 	    return autores;
 	}
 
+	
 	// Método eliminar autores
 	public void eliminarAutorBinario(String filename, int idAutorBorrar) {
 		try {
@@ -183,6 +196,19 @@ public class GestorFicheros {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	// Método para verificar la existencia de un autor por su ID
+    public boolean existeAutor(String filename, int idAutor) {
+        List<Autor> autores = leerAutoresBinario(filename);
+        for (Autor autor : autores) {
+            if (autor.getId() == idAutor) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
 
 	
 	//-----APARTADO DE PRESTAMOS-----//
@@ -271,17 +297,6 @@ public class GestorFicheros {
     }
     
     
-    //-----APARTADO GESTIONAR EXPORTAR IMPORTAR XML-----//
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     //-----APARTADO DE COPIAS DE SEGURIDAD-----//
@@ -328,3 +343,5 @@ public class GestorFicheros {
     }
 
 }
+
+//ERRORES ACTUALIZADOS
