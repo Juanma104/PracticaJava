@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+    <libro id="1">
+        <titulo>Manolito Gafotas</titulo>
+        <autor>Elvira Lindo</autor>
+        <anioPublicacion>1994</anioPublicacion>
+        <genero>Ficción</genero>
+    </libro>
+    <libro id="2">
+        <titulo>Los Juegos Del Hambre</titulo>
+        <autor>Suzanne Collins</autor>
+        <anioPublicacion>2008</anioPublicacion>
+        <genero>Ficción</genero>
+    </libro>
+    <libro id="3">
+        <titulo>Harry Potter y la piedra filosofal</titulo>
+        <autor>J.K. Rowling</autor>
+        <anioPublicacion>1999</anioPublicacion>
+        <genero>Ficción</genero>
+    </libro>
+    <libro id="4">
+        <titulo>Shrek!</titulo>
+        <autor>William Steig</autor>
+        <anioPublicacion>1990</anioPublicacion>
+        <genero>Ficción</genero>
+    </libro>
+    <libro id="5">
+        <titulo>Yo, robot</titulo>
+        <autor>Isaac Asimov</autor>
+        <anioPublicacion>1950</anioPublicacion>
+        <genero>Ficción</genero>
+    </libro>
+</biblioteca>
