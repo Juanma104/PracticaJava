@@ -98,7 +98,7 @@ public class Principal {
         do {
             System.out.println("\nGestion de Libros");
             System.out.println("1. Escribir / Crear libro");
-            System.out.println("2. Leer libro");
+            System.out.println("2. Leer libros");
             System.out.println("3. Actualizar libro");
             System.out.println("4. Eliminar libro");
             System.out.println("5. Volver");
@@ -135,15 +135,22 @@ public class Principal {
     	int nuevoId;
     	
     	scanner.nextLine(); // Evitamos posible error al introducir datos por consola
-        System.out.println("Introduzca el titulo del libro: ");
+        System.out.println("Introduzca el título del libro: ");
         String tituloLibro = scanner.nextLine();
         System.out.println("Introduzca el autor del libro: ");
         String autorLibro = scanner.nextLine();
-        System.out.println("Introduzca el año de publicacion del libro: ");
+        System.out.println("Introduzca el año de publicación del libro: ");
         int anioPublicacion = scanner.nextInt();
         scanner.nextLine(); // Evitamos posible error al introducir datos por consola
-        System.out.println("Introduzca el genero del libro: ");
+        System.out.println("Introduzca el género del libro: ");
         String generoLibro = scanner.nextLine();
+        
+        
+        if (tituloLibro.isEmpty() || autorLibro.isEmpty() || generoLibro.isEmpty()) {
+        	System.out.println("Error: No se ha podido crear el libro, rellene todos los campos");
+        	return;
+        }
+        
         
         /* En el caso del Id, comprobamos si la lista de libros esta vacia, en ese caso le asignaremos al libro que estamos creando
         // la id "1", de lo contrario, obtendra el tamaño de elementos que tiene, recuperamos el ultimo id que haya
@@ -188,7 +195,13 @@ public class Principal {
     	// Preguntamos al usuario el id que desea borrar
         System.out.println("Introduzca el id del libro que desea eliminar: ");
         int idLibroBorrar = scanner.nextInt();
-        scanner.nextLine(); // Evitamos posible error al introducir datos por consola
+        scanner.nextLine();
+        
+        // Verificamos si el libro con el ID proporcionado existe
+        if (!gestorFicheros.existeAutor(filenameAutores, idLibroBorrar)) {
+            System.out.println("El libro con ID " + idLibroBorrar + " no existe. No es posible eliminar.");
+            return;
+        }
 
         // Llamamos al metodo eliminarLibrosBinario
         gestorFicheros.eliminarLibrosBinario(filenameLibros, idLibroBorrar);
@@ -203,6 +216,12 @@ public class Principal {
         int idLibroActualizar = scanner.nextInt();
         scanner.nextLine();
 
+        // Verificamos si el libro con el ID proporcionado existe
+        if (!gestorFicheros.existeLibro(filenameLibros, idLibroActualizar)) {
+            System.out.println("El libro con ID " + idLibroActualizar + " no existe. No es posible actualizar.");
+            return;
+        }
+        
         // Preguntamos al usuario la nueva información
         System.out.println("Introduzca el nuevo título del libro: ");
         String nuevoTitulo = scanner.nextLine();
@@ -213,6 +232,12 @@ public class Principal {
         scanner.nextLine();
         System.out.println("Introduzca el nuevo género del libro: ");
         String nuevoGenero = scanner.nextLine();
+        
+        
+        if (nuevoTitulo.isEmpty() || nuevoAutor.isEmpty() || nuevoGenero.isEmpty()) {
+        	System.out.println("Error: No se ha podido actualizar el libro, rellene todos los campos");
+        	return;
+        }
 
         // Creamos un nuevo objeto Libro con la nueva información actualizada
         Libro nuevoLibro = new Libro(idLibroActualizar, nuevoTitulo, nuevoAutor, nuevoAnioPublicacion, nuevoGenero);
@@ -232,7 +257,7 @@ public class Principal {
         do {
             System.out.println("\nGestión de Autores");
             System.out.println("1. Escribir / Crear autor");
-            System.out.println("2. Leer autor");
+            System.out.println("2. Leer autores");
             System.out.println("3. Actualizar autor");
             System.out.println("4. Eliminar autor");
             System.out.println("5. Volver");
@@ -274,6 +299,11 @@ public class Principal {
         String nacionalidadAutor = scanner.nextLine();
         System.out.println("Introduzca el año de nacimiento del autor: ");
         int anioNacimientoAutor = scanner.nextInt();
+        
+        if (nombreAutor.isEmpty() || nacionalidadAutor.isEmpty()) {
+        	System.out.println("Error: No se ha podido crear el autor, rellene todos los campos");
+        	return;
+        }
 
         if (autores.isEmpty()) {
             nuevoId = 1;
@@ -309,6 +339,12 @@ public class Principal {
         int idAutorActualizar = scanner.nextInt();
         scanner.nextLine();
 
+        // Verificamos si el autor con el ID proporcionado existe
+        if (!gestorFicheros.existeAutor(filenameAutores, idAutorActualizar)) {
+            System.out.println("El autor con ID " + idAutorActualizar + " no existe. No es posible actualizar.");
+            return;
+        }
+        
         System.out.println("Introduzca el nuevo nombre del autor: ");
         String nuevoNombreAutor = scanner.nextLine();
         System.out.println("Introduzca la nueva nacionalidad del autor: ");
@@ -316,6 +352,11 @@ public class Principal {
         System.out.println("Introduzca el nuevo año de nacimiento del autor: ");
         int nuevoAnioNacimientoAutor = scanner.nextInt();
 
+        if (nuevoNombreAutor.isEmpty() || nuevaNacionalidadAutor.isEmpty()) {
+        	System.out.println("Error: No se ha podido actualizar el autor, rellene todos los campos");
+        	return;
+        }
+        
         Autor nuevoAutor = new Autor(idAutorActualizar, nuevoNombreAutor, nuevaNacionalidadAutor, nuevoAnioNacimientoAutor);
 
         gestorFicheros.actualizarAutorBinario(filenameAutores, idAutorActualizar, nuevoAutor);
@@ -328,6 +369,12 @@ public class Principal {
         int idAutorBorrar = scanner.nextInt();
         scanner.nextLine();
 
+        // Verificamos si el autor con el ID proporcionado existe
+        if (!gestorFicheros.existeAutor(filenameAutores, idAutorBorrar)) {
+            System.out.println("El autor con ID " + idAutorBorrar + " no existe. No es posible eliminar.");
+            return;
+        }
+        
         gestorFicheros.eliminarAutorBinario(filenameAutores, idAutorBorrar);
     }
     
@@ -390,6 +437,11 @@ public class Principal {
             String fechaPrestamo = scanner.nextLine();
             System.out.println("Introduzca la fecha de devolución (dd/mm/yyyy): ");
             String fechaDevolucion = scanner.nextLine();
+            
+            if (nombreUsuarioPrestamo.isEmpty() || fechaPrestamo.isEmpty() || fechaDevolucion.isEmpty()) {
+            	System.out.println("Error: No se ha podido registrar el préstamo, rellene todos los campos.");
+            	return;
+            }
 
             // Creamos un objeto Prestamo con la información proporcionada por el usuario
             Prestamo prestamo = new Prestamo(idLibroPrestamo, nombreUsuarioPrestamo, fechaPrestamo, fechaDevolucion);
@@ -440,6 +492,12 @@ public class Principal {
         scanner.nextLine(); // Limpiamos el buffer
         System.out.println("Introduzca la fecha de devolución (dd/mm/yyyy): ");
         String fechaDevolucion = scanner.nextLine();
+        
+        if (fechaDevolucion.isEmpty()) {
+        	System.out.println("Error: No se ha podido registrar la devolución, rellene todos los campos.");
+        	return;
+        }
+        
 
         // Llamamos al método para registrar la devolución en el archivo de texto
         gestorFicheros.registrarDevolucion(idLibroDevolucion, fechaDevolucion, filenamePrestamos, libros);
@@ -453,8 +511,6 @@ public class Principal {
         gestorFicheros.mostrarPrestamos(filenamePrestamos);
     }
     
-    
-    //TODO: TERMINAR DE COMENTAR LOS METODOS NUEVOS
     
     //-----APARTADO GESTIONAR IMPORTAR / EXPORTAR XML-----//
     private static void gestionarExportImportXML() {
@@ -838,3 +894,5 @@ public class Principal {
     }
     
 }
+
+//ERRORES ACTUALIZADOS
